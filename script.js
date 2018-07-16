@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	let currentObjId = 0;
 	$('#js').html('Hello, hello!');
 	fetch('https://jsonplaceholder.typicode.com/photos')
 		.then(response => response.json())
@@ -6,6 +7,7 @@ $(document).ready(function(){
 
 			console.log(json[0]);
 			$galery(0);
+			$midle(0);
 
 			function $galery(n){
 				function imager(i) {return $('<img/>').attr({
@@ -19,6 +21,25 @@ $(document).ready(function(){
 					$('#galery5').append(imager(i));
 				}
 			}
+
+			function $midle(n){
+				$('#midleHeading').html(json[n].id + '. ' + json[n].title);
+				$('#demoImage').attr('src', json[n].url);
+			}
+
+			$('#forward').click(function(){
+				if(currentObjId < json.length - 1){
+					currentObjId++;
+					$midle(currentObjId);
+				}
+			});
+
+			$('#back').click(function(){
+				if(currentObjId > 0){
+					currentObjId--;
+					$midle(currentObjId);
+				}
+			});
 	});
 
 	
