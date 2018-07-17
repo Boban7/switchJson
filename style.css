@@ -67,3 +67,7 @@ button:hover{
 }
 
 button{outline: none;}
+
+.current{border: 20px solid black;}
+
+#galery5 img:hover{border: 20px dashed red;}

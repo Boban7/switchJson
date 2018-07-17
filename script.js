@@ -5,21 +5,29 @@ $(document).ready(function(){
 		.then(response => response.json())
 		.then(json => {
 
-			console.log(json[0]);
 			$galery(0);
 			$midle(0);
 
 			function $galery(n){
 				function imager(i) {return $('<img/>').attr({
-						'src': json[i].url,
-						'alt': 'image',
-						'width':'20%',
-						'height':'auto'
+						'id'	: 'galeryItem' + i,
+						'src'	: json[i].url,
+						'alt'	: 'image',
+						'width'	: '20%',
+						'height': 'auto',
+						'class'	: 'clickableImg'
 					});
 				}
 				for(var i = n; i < n + 5; i++){
 					$('#galery5').append(imager(i));
 				}
+			}
+
+			$('#galeryItem0').addClass('current');
+
+			function changeCurrent(n, old){
+				$('#galeryItem' + n).addClass('current');
+				$('#galeryItem' + old).toggleClass('current');
 			}
 
 			function $midle(n){
@@ -31,6 +39,12 @@ $(document).ready(function(){
 				if(currentObjId < json.length - 1){
 					currentObjId++;
 					$midle(currentObjId);
+
+					if(currentObjId % 5 === 0){
+						$('#galery5').empty();
+						$galery(currentObjId);
+					}
+					changeCurrent(currentObjId, currentObjId - 1);
 				}
 			});
 
@@ -38,7 +52,21 @@ $(document).ready(function(){
 				if(currentObjId > 0){
 					currentObjId--;
 					$midle(currentObjId);
+
+					if((currentObjId + 1) % 5 === 0){
+						$('#galery5').empty();
+						$galery(currentObjId - 4);
+					}
+					changeCurrent(currentObjId, currentObjId + 1);
 				}
+			});
+
+			$('#galery5').on('click', 'img.clickableImg', function(){
+				console.log(this.id.slice(10));
+				$('#galeryItem' + currentObjId).toggleClass('current');
+				currentObjId = this.id.slice(10);
+				$('#galeryItem' + currentObjId).toggleClass('current');
+				$midle(currentObjId);
 			});
 	});
 
